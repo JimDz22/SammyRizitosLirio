@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Sammy 💜</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0a2e 0%, #16213e 50%, #0f3460 100%);
+            overflow: hidden;
+            font-family: 'Playfair Display', serif;
+            position: relative;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: var(--opacity); transform: scale(1); }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        .start-btn {
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(45deg, #e94560, #ff6b6b);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .lily-container {
+            display: none;
+            position: relative;
+            width: 400px;
+            height: 600px;
+            filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
+        }
+
+        .stem {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 0;
+            background: linear-gradient(to top, #2d5016, #4a7c2e);
+            border-radius: 4px;
+            animation: growStem 2s ease-out forwards;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+        }
+
+        @keyframes growStem {
+            to { height: 350px; }
+        }
+
+        .leaf {
+            position: absolute;
+            background: linear-gradient(45deg, #3d6b1f, #5a8f3a);
+            border-radius: 0 100% 0 100%;
+            transform-origin: bottom left;
+            opacity: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .leaf-left {
+            bottom: 100px;
+            left: calc(33% - 4px);
+            width: 80px;
+            height: 150px;
+            animation: growLeafLeft 1.5s ease-out 1.5s forwards;
+        }
+
+        .leaf-right {
+            bottom: 180px;
+            left: calc(66% + 4px);
+            width: 70px;
+            height: 130px;
+            transform: scaleX(-1);
+            border-radius: 0 100% 0 100%;
+            animation: growLeafRight 1.5s ease-out 1.8s forwards;
+        }
+
+        @keyframes growLeafLeft {
+            from { transform: scale(0) rotate(-20deg); opacity: 0; }
+            to { transform: scale(1) rotate(-30deg); opacity: 1; }
+        }
+
+        @keyframes growLeafRight {
+            from { transform: scaleX(-1) scale(0) rotate(-20deg); opacity: 0; }
+            to { transform: scaleX(-1) scale(1) rotate(-25deg); opacity: 1; }
+        }
+
+        .flower {
+            position: absolute;
+            bottom: 330px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            opacity: 0;
+            animation: bloom 2s ease-out 2.5s forwards;
+        }
+
+        @keyframes bloom {
+            from { 
+                opacity: 0; 
+                transform: translateX(-50%) scale(0) rotate(-180deg); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(-50%) scale(1) rotate(0deg); 
+            }
+        }
+
+        .petal {
+            --rot: 0deg;
+
+            position: absolute;
+            width: 80px;
+            height: 190px;
+            left: calc(31%);
+            top: -15%;
+            background: linear-gradient(to top, #f8f8ff 0%, #fff0f5 30%, #e6e6fa 60%, #d8bfd8 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform-origin: 50% 100%;
+            opacity: 0;
+
+            transform: rotate(var(--rot)) scale(0);
+
+            animation: petalBloom 1.6s ease-out forwards;
+
+            box-shadow:
+                inset -10px 0 20px rgba(216, 191, 216, 0.5),
+                inset 10px 0 20px rgba(255, 255, 255, 0.8),
+                0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .petal::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 60%;
+            background: linear-gradient(to bottom, rgba(186, 85, 211, 0.3), transparent);
+            border-radius: 1px;
+        }
+
+        .petal::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 2px;
+
+            background: linear-gradient(
+                135deg,
+                rgba(186, 85, 211, 0.7),
+                rgba(255, 182, 193, 0.6),
+                rgba(230, 230, 250, 0.8)
+            );
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+
+            pointer-events: none;
+            animation: petalGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes petalGlow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes petalBloom {
+            0% {
+                opacity: 0;
+                transform: rotate(var(--rot)) scale(0) rotate(-180deg);
+            }
+            60% {
+                opacity: 1;
+                transform: rotate(var(--rot)) scale(1.1) rotate(20deg);
+            }
+            100% {
+                opacity: 1;
+                transform: rotate(var(--rot)) scale(1);
+            }
+        }
+
+        .petal:nth-child(1) { --rot: 0deg;   animation-delay: 2.6s; }
+        .petal:nth-child(2) { --rot: 60deg;  animation-delay: 2.75s; }
+        .petal:nth-child(3) { --rot: 120deg; animation-delay: 2.9s; }
+        .petal:nth-child(4) { --rot: 180deg; animation-delay: 3.05s; }
+        .petal:nth-child(5) { --rot: 240deg; animation-delay: 3.2s; }
+        .petal:nth-child(6) { --rot: 300deg; animation-delay: 3.35s; }
+
+        .center {
+            position: absolute;
+            top: 81%;
+            left: 50%;
+            transform: translate(-50%, -45%);
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(
+                circle at 30% 30%,
+                #fff6a3 0%,
+                #ffd700 40%,
+                #ff8c00 70%,
+                #ff6347 100%
+            );
+            border-radius: 50%;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.6),
+                inset -5px -5px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+            animation: glow 3s ease-in-out infinite, 
+                        pulseCenter 4s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.5); }
+        }
+
+        .stamen {
+            position: absolute;
+            width: 4px;
+            height: 50px;
+            background: linear-gradient(to top, #ff8c00, #ffd700);
+            border-radius: 2px;
+            transform-origin: bottom center;
+            top: -17%;
+            left: 50%;
+            margin-left: 0px;
+            margin-top: -24px;
+        }
+
+        .stamen:nth-child(1) { transform: rotate(0deg) translateY(-15px); }
+        .stamen:nth-child(2) { transform: rotate(60deg) translateY(-15px); }
+        .stamen:nth-child(3) { transform: rotate(120deg) translateY(-15px); }
+        .stamen:nth-child(4) { transform: rotate(180deg) translateY(-15px); }
+        .stamen:nth-child(5) { transform: rotate(240deg) translateY(-15px); }
+        .stamen:nth-child(6) { transform: rotate(300deg) translateY(-15px); }
+
+        .anther {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 18px;
+            background: #8b4513;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .message {
+            margin-top: 40px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 2s ease-out 4s forwards;
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #fff0f5;
+            text-shadow: 0 0 20px rgba(230, 230, 250, 0.5);
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff0f5, #e6e6fa, #d8bfd8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: #d8bfd8;
+            font-style: italic;
+            letter-spacing: 2px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .falling-petals {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .falling-petal {
+            position: absolute;
+            width: 20px;
+            height: 30px;
+            background: linear-gradient(to bottom, #e6e6fa, #d8bfd8);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle 1s linear forwards;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .lily-container {
+                transform: scale(0.7);
+            }
+            .title {
+                font-size: 2.5rem;
+            }
+        }
+        @keyframes pulseCenter {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.08); }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="falling-petals" id="fallingPetals"></div>
+    
+    <div class="container">
+        <button class="start-btn" id="startBtn" onclick="startExperience()">
+            🥰
+        </button>
+        
+        <div class="lily-container" id="lilyContainer">
+            <div class="stem"></div>
+            <div class="leaf leaf-left"></div>
+            <div class="leaf leaf-right"></div>
+            
+            <div class="flower">
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                
+                <div class="center">
+                    <div class="stamen"><div class="anther"></div></div>
+                    <div class="stamen"><div class="anther"></div></div>
+                    <div class="stamen"><div class="anther"></div></div>
+                    <div class="stamen"><div class="anther"></div></div>
+                    <div class="stamen"><div class="anther"></div></div>
+                    <div class="stamen"><div class="anther"></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="message" id="message">
+            <h1 class="title">Sammy Rizitos</h1>
+            <p class="subtitle">Como este lirio, mi amor por ti florece cada dia.. Te Amo 💗</p>
+        </div>
+    </div>
+    <audio id="bgMusic" preload="auto" loop>
+    <source src="intrumentalstillwith.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+                star.style.setProperty('--opacity', Math.random() * 0.8 + 0.2);
+                starsContainer.appendChild(star);
+            }
+        }
+
+        function createFallingPetals() {
+            const container = document.getElementById('fallingPetals');
+            setInterval(() => {
+                const petal = document.createElement('div');
+                petal.className = 'falling-petal';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                petal.style.opacity = Math.random() * 0.5 + 0.3;
+                petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+                container.appendChild(petal);
+                
+                setTimeout(() => petal.remove(), 10000);
+            }, 1000);
+        }
+
+        function createSparkles() {
+            const container = document.getElementById('lilyContainer');
+            setInterval(() => {
+                if (container.style.display === 'none') return;
+                
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 100 + Math.random() * 100;
+                const x = Math.cos(angle) * radius + 200;
+                const y = Math.sin(angle) * radius + 100;
+                
+                sparkle.style.left = x + 'px';
+                sparkle.style.top = y + 'px';
+                container.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 1000);
+            }, 200);
+        }
+
+        function startExperience() {
+            const btn = document.getElementById('startBtn');
+            const lily = document.getElementById('lilyContainer');
+            const message = document.getElementById('message');
+            const music = document.getElementById('bgMusic');
+            
+            btn.style.display = 'none';
+            lily.style.display = 'block';
+            
+            music.volume = 0.6;
+            music.play().catch(e => {
+                console.log("El navegador bloqueó el autoplay:", e);
+            });
+            
+            setTimeout(() => {
+                createSparkles();
+                createFallingPetals();
+            }, 2500);
+        }
+
+        createStars();
+    </script>
+</body>
+</html>
